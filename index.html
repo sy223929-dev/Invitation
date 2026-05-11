@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>अयांश का जन्मदिन समारोह</title>
+
+    <!-- Google Fonts: Added Noto Serif Devanagari and Mukta for elegant Hindi text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Montserrat:wght@200;300;400&family=Noto+Serif+Devanagari:wght@300;400;500;600&family=Mukta:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP for Smooth Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            base: '#0B1A14', 
+                            light: '#13281F',
+                            dark: '#050D0A'
+                        },
+                        gold: {
+                            light: '#F3E5AB',
+                            DEFAULT: '#C29B57', 
+                            dark: '#8A6D3B'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'Noto Serif Devanagari', 'serif'],
+                        body: ['Cormorant Garamond', 'Noto Serif Devanagari', 'serif'],
+                        sans: ['Montserrat', 'Mukta', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* प्रीमियम स्टाइलिंग और स्क्रॉलबार */
+        body {
+            background-color: #0B1A14;
+            color: #C29B57;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B1A14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C29B57;
+            border-radius: 10px;
+        }
+
+        /* सुनहरी टेक्स्ट इफ़ेक्ट */
+        .text-gold-gradient {
+            background: linear-gradient(to right, #C29B57, #F3E5AB, #C29B57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* लाइन आर्ट और डिवाइडर्स */
+        .line-divider {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin: 2rem 0;
+        }
+        .line-divider::before, .line-divider::after {
+            content: '';
+            height: 1px;
+            background: rgba(194, 155, 87, 0.3);
+            flex-grow: 1;
+            max-width: 100px;
+        }
+        .line-divider span {
+            margin: 0 15px;
+            display: block;
+            width: 6px;
+            height: 6px;
+            background: #C29B57;
+            transform: rotate(45deg);
+        }
+
+        /* एंट्री सील (बटन) इफ़ेक्ट */
+        .seal-button {
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+        
+        .seal-ring {
+            border: 1px solid rgba(194, 155, 87, 0.5);
+            border-radius: 50%;
+            position: absolute;
+            inset: 6px;
+        }
+
+        /* स्लाइडर इफ़ेक्ट */
+        .slide {
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out, transform 8s linear;
+            transform: scale(1.05);
+        }
+        .slide.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* टाइमलाइन डॉट */
+        .timeline-dot {
+            position: absolute;
+            left: -5px;
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            background: #C29B57;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(194, 155, 87, 0.5);
+        }
+    </style>
+</head>
+<body class="font-body antialiased selection:bg-gold selection:text-emerald-dark">
+
+    <!-- ऑडियो सोर्स -->
+    <audio id="doorSound" src="https://actions.google.com/sounds/v1/foley/whoosh_heavy.ogg" preload="auto"></audio>
+    <audio id="bgMusic" src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3" loop preload="auto"></audio>
+
+    <!-- ========================================== -->
+    <!-- ENTRY EXPERIENCE (ZAREQIA STYLE) -->
+    <!-- ========================================== -->
+    <div id="intro-screen" class="fixed inset-0 z-[100] flex overflow-hidden bg-emerald-base">
+        
+        <!-- लेफ्ट पैनल (Left Panel) -->
+        <div class="panel-left relative w-1/2 h-full bg-emerald-base flex justify-end">
+            <!-- वर्टिकल लाइन डिज़ाइन -->
+            <div class="absolute right-[20px] top-0 bottom-0 w-[1px] bg-gold/30"></div>
+            <div class="absolute right-[40px] top-[10%] bottom-[10%] w-[1px] bg-gold/20"></div>
+            <svg class="absolute right-[20px] top-[10%] w-[40px] h-[40px] stroke-gold/50" fill="none" viewBox="0 0 40 40">
+                <path d="M40,0 C40,20 20,40 0,40" stroke-width="0.5"/>
+            </svg>
+            <svg class="absolute right-[20px] bottom-[10%] w-[40px] h-[40px] stroke-gold/50" fill="none" viewBox="0 0 40 40">
+                <path d="M40,40 C40,20 20,0 0,0" stroke-width="0.5"/>
+            </svg>
+        </div>
+
+        <!-- राइट पैनल (Right Panel) -->
+        <div class="panel-right relative w-1/2 h-full bg-emerald-base flex justify-start">
+            <!-- वर्टिकल लाइन डिज़ाइन -->
+            <div class="absolute left-[20px] top-0 bottom-0 w-[1px] bg-gold/30"></div>
+            <div class="absolute left-[40px] top-[10%] bottom-[10%] w-[1px] bg-gold/20"></div>
+            <svg class="absolute left-[20px] top-[10%] w-[40px] h-[40px] stroke-gold/50" fill="none" viewBox="0 0 40 40">
+                <path d="M0,0 C0,20 20,40 40,40" stroke-width="0.5"/>
+            </svg>
+            <svg class="absolute left-[20px] bottom-[10%] w-[40px] h-[40px] stroke-gold/50" fill="none" viewBox="0 0 40 40">
+                <path d="M0,40 C0,20 20,0 40,0" stroke-width="0.5"/>
+            </svg>
+        </div>
+
+        <!-- बीच का सील बटन (Center Seal Button) -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <button id="open-btn" class="seal-button relative w-32 h-32 rounded-full bg-[#11241C] border border-gold/40 flex flex-col items-center justify-center text-gold cursor-pointer pointer-events-auto hover:scale-105 transition-transform duration-500 z-50">
+                <div class="seal-ring"></div>
+                <span class="font-serif text-4xl text-gold-gradient tracking-widest mt-2">अ</span>
+                <span class="font-sans text-[10px] tracking-[0.1em] mt-3 opacity-80">खोलने के लिए छुएं</span>
+            </button>
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- MAIN INVITATION CONTENT -->
+    <!-- ========================================== -->
+    <main id="main-content" class="relative z-10 hidden bg-emerald-base min-h-screen w-full flex flex-col items-center pb-20">
+        
+        <!-- फ्लोटिंग म्यूजिक बटन टॉप-राइट (Floating Music Button) -->
+        <button id="music-toggle" class="fixed top-6 right-6 z-50 w-10 h-10 bg-gold/10 border border-gold/30 rounded flex items-center justify-center backdrop-blur-sm transition-all hover:bg-gold/20">
+            <i data-lucide="volume-2" class="w-5 h-5 text-gold"></i>
+        </button>
+
+        <!-- सेक्शन 1: हेडर और इंट्रो -->
+        <section class="w-full max-w-md mx-auto px-6 pt-24 text-center">
+            
+            <div class="gsap-hero">
+                <!-- टॉप डेकोरेशन -->
+                <div class="flex justify-center mb-6">
+                    <svg width="100" height="30" viewBox="0 0 100 30" fill="none" class="stroke-gold/50">
+                        <path d="M0,15 L40,15 M60,15 L100,15" stroke-width="0.5"/>
+                        <rect x="45" y="10" width="10" height="10" transform="rotate(45 50 15)" fill="#C29B57" stroke="none"/>
+                    </svg>
+                </div>
+
+                <p class="font-sans text-[12px] md:text-sm tracking-[0.2em] text-gold/80 mb-6">
+                    हम मना रहे हैं
+                </p>
+
+                <!-- बच्चे का नाम -->
+                <h1 class="font-serif text-5xl md:text-6xl text-gold-gradient tracking-widest mb-4">
+                    अयांश
+                </h1>
+
+                <div class="line-divider"><span></span></div>
+
+                <p class="font-body italic text-xl md:text-2xl text-gold/90 mt-6 mb-12 leading-relaxed">
+                    हमारे नन्हे अयांश के पहले जन्मदिन पर <br> आप सपरिवार सादर आमंत्रित हैं
+                </p>
+
+                <!-- स्क्रॉल इंडिकेटर -->
+                <div class="flex flex-col items-center opacity-60 mt-10">
+                    <span class="font-sans text-[10px] tracking-[0.2em] mb-2">नीचे देखें</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 animate-bounce"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- सेक्शन 2: स्पेशल मैसेज -->
+        <section class="w-full max-w-lg mx-auto px-6 py-16 text-center gsap-section">
+            <svg width="100%" height="20" viewBox="0 0 200 20" fill="none" class="mb-8 opacity-50">
+                <path d="M0,10 Q50,0 100,10 T200,10" stroke="#C29B57" stroke-width="0.5" fill="none"/>
+                <circle cx="20" cy="10" r="1" fill="#C29B57"/>
+                <circle cx="100" cy="10" r="1.5" fill="#C29B57"/>
+                <circle cx="180" cy="10" r="1" fill="#C29B57"/>
+            </svg>
+
+            <p class="font-body text-lg md:text-xl leading-relaxed text-gold/80">
+                अत्यंत हर्ष के साथ हम आपको अपने नन्हे अयांश के पहले जन्मदिन के शुभ अवसर पर आमंत्रित करते हैं। आपकी उपस्थिति और आशीर्वाद हमारे लिए अत्यंत महत्वपूर्ण है।
+            </p>
+
+            <svg width="100%" height="20" viewBox="0 0 200 20" fill="none" class="mt-8 opacity-50">
+                <path d="M0,10 Q50,20 100,10 T200,10" stroke="#C29B57" stroke-width="0.5" fill="none"/>
+                <circle cx="20" cy="10" r="1" fill="#C29B57"/>
+                <circle cx="100" cy="10" r="1.5" fill="#C29B57"/>
+                <circle cx="180" cy="10" r="1" fill="#C29B57"/>
+            </svg>
+        </section>
+
+        <!-- सेक्शन 3: फोटो स्लाइडर (आर्च डिज़ाइन) -->
+        <section class="w-full max-w-md mx-auto px-6 py-10 gsap-section">
+            <h2 class="font-serif text-2xl text-gold text-center mb-4">खुशियों की झलकियाँ</h2>
+            <div class="line-divider mb-8"><span></span></div>
+
+            <!-- आर्च (Arch) शेप वाली फोटो फ्रेम -->
+            <div class="relative w-full aspect-[4/5] rounded-t-full overflow-hidden border border-gold/30 bg-emerald-light p-2 shadow-2xl shadow-black">
+                <div id="slider" class="relative w-full h-full rounded-t-full overflow-hidden">
+                    <!-- फोटोज़ यहाँ बदलें -->
+                    <img src="https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&q=80&w=800" class="slide active absolute inset-0 w-full h-full object-cover">
+                    <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&q=80&w=800" class="slide absolute inset-0 w-full h-full object-cover">
+                </div>
+            </div>
+        </section>
+
+        <!-- सेक्शन 4: काउंटडाउन टाइमर -->
+        <section class="w-full max-w-lg mx-auto px-6 py-16 text-center gsap-section">
+            <h2 class="font-serif text-2xl text-gold mb-6">उत्सव की प्रतीक्षा</h2>
+            <div class="flex justify-center mb-8">
+                <i data-lucide="heart" class="w-4 h-4 text-gold/50 fill-gold/20"></i>
+            </div>
+
+            <div class="flex justify-center gap-3 md:gap-6">
+                <!-- Days -->
+                <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-[#11241C] border border-gold/20 flex items-center justify-center shadow-lg">
+                        <span id="cd-days" class="font-serif text-2xl md:text-3xl text-gold">00</span>
+                    </div>
+                    <span class="mt-3 font-sans text-[11px] tracking-widest text-gold/60">दिन</span>
+                </div>
+                <!-- Hours -->
+                <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-[#11241C] border border-gold/20 flex items-center justify-center shadow-lg">
+                        <span id="cd-hours" class="font-serif text-2xl md:text-3xl text-gold">00</span>
+                    </div>
+                    <span class="mt-3 font-sans text-[11px] tracking-widest text-gold/60">घंटे</span>
+                </div>
+                <!-- Minutes -->
+                <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-[#11241C] border border-gold/20 flex items-center justify-center shadow-lg">
+                        <span id="cd-minutes" class="font-serif text-2xl md:text-3xl text-gold">00</span>
+                    </div>
+                    <span class="mt-3 font-sans text-[11px] tracking-widest text-gold/60">मिनट</span>
+                </div>
+                <!-- Seconds -->
+                <div class="flex flex-col items-center">
+                    <div class="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-[#11241C] border border-gold/20 flex items-center justify-center shadow-lg">
+                        <span id="cd-seconds" class="font-serif text-2xl md:text-3xl text-gold">00</span>
+                    </div>
+                    <span class="mt-3 font-sans text-[11px] tracking-widest text-gold/60">सेकंड</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- सेक्शन 5: प्रोग्राम टाइमलाइन (Event Details) -->
+        <section class="w-full max-w-md mx-auto px-8 py-10 gsap-section">
+            <div class="text-center mb-8">
+                <i data-lucide="clock" class="w-6 h-6 text-gold mx-auto mb-3"></i>
+                <h2 class="font-serif text-2xl text-gold">कार्यक्रम विवरण</h2>
+                <div class="flex justify-center mt-4">
+                    <i data-lucide="heart" class="w-3 h-3 text-gold/50 fill-gold/20"></i>
+                </div>
+            </div>
+
+            <!-- टाइमलाइन कंटेनर -->
+            <div class="relative border-l border-gold/30 ml-2 pl-8 py-4 space-y-10">
+                
+                <!-- इवेंट 1 -->
+                <div class="relative">
+                    <div class="timeline-dot"></div>
+                    <h3 class="font-serif text-xl text-gold mb-1">अतिथि आगमन</h3>
+                    <p class="font-sans text-[12px] text-gold/70 tracking-wider">25 जून 2026, शाम 7:00 बजे</p>
+                </div>
+
+                <!-- इवेंट 2 -->
+                <div class="relative">
+                    <div class="timeline-dot"></div>
+                    <h3 class="font-serif text-xl text-gold mb-1">केक कटिंग समारोह</h3>
+                    <p class="font-sans text-[12px] text-gold/70 tracking-wider">25 जून 2026, शाम 7:30 बजे</p>
+                </div>
+
+                <!-- इवेंट 3 -->
+                <div class="relative">
+                    <div class="timeline-dot"></div>
+                    <h3 class="font-serif text-xl text-gold mb-1">रात्रिभोज एवं जश्न</h3>
+                    <p class="font-sans text-[12px] text-gold/70 tracking-wider">25 जून 2026, रात 8:30 बजे</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- सेक्शन 6: वेन्यू और मैप (Venue & Palace Line Art) -->
+        <section class="w-full max-w-md mx-auto px-6 py-16 text-center gsap-section">
+            <i data-lucide="map-pin" class="w-6 h-6 text-gold mx-auto mb-3"></i>
+            <h2 class="font-serif text-2xl text-gold mb-4">कार्यक्रम स्थल</h2>
+            <div class="flex justify-center mb-8">
+                <i data-lucide="heart" class="w-3 h-3 text-gold/50 fill-gold/20"></i>
+            </div>
+
+            <!-- Venue Name -->
+            <h3 class="font-serif text-2xl text-gold font-semibold mb-2">अयांश का निवास स्थान</h3>
+            <p class="font-body text-gold/80 text-xl mb-8">बरगदही</p>
+
+            <!-- महल/बिल्डिंग का लाइन आर्ट (Palace Line Art SVG) -->
+            <div class="flex justify-center mb-8 opacity-40">
+                <svg width="200" height="70" viewBox="0 0 200 70" fill="none" stroke="#C29B57" stroke-width="0.8">
+                    <!-- Base line -->
+                    <line x1="10" y1="65" x2="190" y2="65"/>
+                    <!-- Main building block -->
+                    <rect x="50" y="40" width="100" height="25"/>
+                    <!-- Main Dome -->
+                    <path d="M80,40 C80,10 120,10 120,40"/>
+                    <path d="M100,10 L100,5"/>
+                    <!-- Small Left Dome -->
+                    <path d="M55,40 C55,25 75,25 75,40"/>
+                    <!-- Small Right Dome -->
+                    <path d="M125,40 C125,25 145,25 145,40"/>
+                    <!-- Left Minaret -->
+                    <rect x="30" y="25" width="10" height="40"/>
+                    <path d="M30,25 L35,15 L40,25 Z"/>
+                    <!-- Right Minaret -->
+                    <rect x="160" y="25" width="10" height="40"/>
+                    <path d="M160,25 L165,15 L170,25 Z"/>
+                    <!-- Doors / Arches -->
+                    <path d="M90,65 C90,55 110,55 110,65"/>
+                </svg>
+            </div>
+
+            <!-- मैप बटन (फुटर की जगह यहाँ) -->
+            <!-- Map Link -->
+            <a href="https://maps.app.goo.gl/ALujHdsJc4ZUhv648" target="_blank" class="inline-block bg-gold text-[#0B1A14] font-sans text-[12px] md:text-sm font-bold tracking-[0.1em] px-8 py-4 rounded hover:bg-gold-light transition-colors shadow-lg shadow-black/50">
+                गूगल मैप्स पर देखें
+            </a>
+        </section>
+
+        <!-- सेक्शन 7: परिवार और कांटेक्ट (Parents & RSVP) -->
+        <section class="w-full max-w-md mx-auto px-6 py-10 text-center gsap-section">
+            <div class="line-divider mb-8"><span></span></div>
+            
+            <i data-lucide="users" class="w-6 h-6 text-gold mx-auto mb-4"></i>
+            <h2 class="font-serif text-2xl text-gold mb-8">स्नेह सहित</h2>
+
+            <!-- Parents -->
+            <h3 class="font-serif text-2xl text-gold mb-2">जालंधर एवं आशा यादव</h3>
+            <p class="font-sans text-[12px] text-gold/60 tracking-[0.2em] mb-10">यादव परिवार</p>
+
+            <div class="flex justify-center mt-6">
+                <i data-lucide="phone" class="w-5 h-5 text-gold mx-auto mb-4"></i>
+            </div>
+            <h2 class="font-serif text-xl text-gold mb-6">संपर्क सूत्र</h2>
+            
+            <div class="flex flex-col items-center gap-4">
+                <!-- Call Button -->
+                <!-- Phone -->
+                <a href="tel:+917880844338" class="text-gold/80 hover:text-gold font-body text-xl border-b border-gold/30 pb-1">
+                    +91 78808 44338
+                </a>
+                <a href="tel:+918960194526" class="text-gold/80 hover:text-gold font-body text-xl border-b border-gold/30 pb-1">
+                    +91 89601 94526
+                </a>
+            </div>
+
+            <div class="mt-16 pb-10">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" class="mx-auto opacity-50 stroke-gold">
+                    <rect x="15" y="15" width="10" height="10" transform="rotate(45 20 20)" stroke-width="1"/>
+                    <circle cx="20" cy="20" r="2" fill="#C29B57"/>
+                </svg>
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- ========================================== -->
+    <!-- LOGIC & ANIMATIONS SCRIPT -->
+    <!-- ========================================== -->
+    <script>
+        // Icons लोड करें
+        lucide.createIcons();
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- Configuration ---
+        const eventDate = new Date('2026-06-25T19:30:00').getTime(); 
+        const doorSound = document.getElementById('doorSound');
+        const bgMusic = document.getElementById('bgMusic');
+        bgMusic.volume = 0.4;
+        let musicPlaying = false;
+
+        // --- Zareqia Style Opening Animation ---
+        const openBtn = document.getElementById('open-btn');
+        
+        openBtn.addEventListener('click', () => {
+            // ऑडियो प्लेबैक (सुरक्षित तरीका)
+            try {
+                doorSound.play().catch(e => console.warn("Sound prevented:", e));
+                bgMusic.play().catch(e => console.warn("Music prevented:", e));
+                musicPlaying = true;
+                updateMusicIcon();
+            } catch (err) {}
+
+            const tl = gsap.timeline();
+
+            // 1. बटन को छोटा करके गायब करें
+            tl.to(openBtn, { scale: 0, opacity: 0, duration: 0.5, ease: "back.in(1.7)" });
+
+            // 2. लेफ्ट और राइट पैनल्स को स्लाइड करें (पर्दे खुलने जैसा इफ़ेक्ट)
+            tl.to(".panel-left", { xPercent: -100, duration: 1.5, ease: "power3.inOut" }, 0.3);
+            tl.to(".panel-right", { xPercent: 100, duration: 1.5, ease: "power3.inOut" }, 0.3);
+
+            // 3. इंट्रो स्क्रीन को हटा दें
+            tl.set("#intro-screen", { display: "none" }, 1.8);
+
+            // 4. मेन कंटेंट दिखाएं और एनिमेट करें
+            document.getElementById('main-content').classList.remove('hidden');
+            tl.from("#main-content", { opacity: 0, duration: 1 }, 1.2);
+            
+            tl.from(".gsap-hero > *", { 
+                y: 20, 
+                opacity: 0, 
+                duration: 1, 
+                stagger: 0.15, 
+                ease: "power2.out",
+                onComplete: () => ScrollTrigger.refresh()
+            }, 1.5);
+        });
+
+        // --- Scroll Animations ---
+        gsap.utils.toArray('.gsap-section').forEach(section => {
+            gsap.from(section, {
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                },
+                y: 40,
+                opacity: 0,
+                duration: 1,
+                ease: "power2.out"
+            });
+        });
+
+        // --- Image Slideshow ---
+        const slides = document.querySelectorAll('.slide');
+        if(slides.length > 0) {
+            let currentSlide = 0;
+            setInterval(() => {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].classList.add('active');
+            }, 3500);
+        }
+
+        // --- Countdown Timer ---
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            if (distance < 0) {
+                document.getElementById("cd-days").innerText = "00";
+                document.getElementById("cd-hours").innerText = "00";
+                document.getElementById("cd-minutes").innerText = "00";
+                document.getElementById("cd-seconds").innerText = "00";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("cd-days").innerText = String(days).padStart(2, '0');
+            document.getElementById("cd-hours").innerText = String(hours).padStart(2, '0');
+            document.getElementById("cd-minutes").innerText = String(minutes).padStart(2, '0');
+            document.getElementById("cd-seconds").innerText = String(seconds).padStart(2, '0');
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // --- Music Toggle ---
+        const musicToggleBtn = document.getElementById('music-toggle');
+        function updateMusicIcon() {
+            const icon = musicToggleBtn.querySelector('i');
+            if(musicPlaying) {
+                icon.setAttribute('data-lucide', 'volume-2');
+                musicToggleBtn.classList.remove('opacity-50');
+            } else {
+                icon.setAttribute('data-lucide', 'volume-x');
+                musicToggleBtn.classList.add('opacity-50');
+            }
+            lucide.createIcons();
+        }
+
+        musicToggleBtn.addEventListener('click', () => {
+            if(musicPlaying) {
+                bgMusic.pause();
+                musicPlaying = false;
+            } else {
+                bgMusic.play();
+                musicPlaying = true;
+            }
+            updateMusicIcon();
+        });
+
+    </script>
+</body>
+</html>
